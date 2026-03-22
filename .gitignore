@@ -1,0 +1,11 @@
+# Docker compose file
+docker-compose.yaml
+
+# dotenv
+.env
+
+# pycache
+__pycache__/
+
+# Venv
+venv/
