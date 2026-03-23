@@ -1,17 +1,16 @@
-from airflow import DAG, task
+from airflow import DAG
+from airflow.decorators import task
 from datetime import datetime
 
 with DAG(
-    dag_id="simple_print_dag_v3",
+    dag_id="debug_dag",
     start_date=datetime(2024, 1, 1),
-    schedule="@daily",
+    schedule=None,
     catchup=False,
 ) as dag:
 
     @task
-    def print_message(i: int):
-        print(f"Hello from task {i}")
+    def hello():
+        print("Hello Airflow")
 
-    # Dynamically create tasks
-    for i in range(5):
-        print_message.override(task_id=f"print_task_{i}")(i)
+    hello()
