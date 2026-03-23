@@ -13,4 +13,5 @@ with DAG(
     def hello():
         print("Hello Airflow")
 
-    hello()
+    for i in range(5):
+        hello()
