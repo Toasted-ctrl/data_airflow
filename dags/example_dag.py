@@ -1,5 +1,5 @@
 from airflow import DAG
-from airflow.decorators import task
+from airflow.sdk import task
 from datetime import datetime
 
 from scripts.requests import request_json
@@ -16,6 +16,6 @@ with DAG(
         print("Hello Airflow")
 
     for i in range(5):
-        hello()
+        hello.override(task_id=f"hello_{i}")()
 
     request_json()
