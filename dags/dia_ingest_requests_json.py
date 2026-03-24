@@ -1,4 +1,5 @@
 from airflow import DAG
+from airflow.sdk import task
 from datetime import datetime
 
 from scripts.core.configs import dia_config
@@ -13,6 +14,17 @@ with DAG(
     catchup=False,
 ) as dag:
     
-    db = get_db(engine_url=dia_config.db_url)
-    sources = fetch_sources(db=db, type="hourly")
-    dia_request_json()
+    @task
+    def get_sources():
+        db = get_db(engine_url=dia_config.db_url)
+        return fetch_sources(db=db, type="hourly")
+    
+    @task
+    def request_json(sources):
+        return dia_request_json()
+    
+    sources = get_sources()
+
+    request_json(sources=sources)
+
+    "sources >> request_json"
