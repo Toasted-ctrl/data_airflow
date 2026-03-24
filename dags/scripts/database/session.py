@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker, Session
 from typing import Generator
 
 @task
-def get_db(engine_url) -> Generator[Session]:
+def get_db(engine_url) -> Generator[Session, None, None]:
     engine = create_engine(engine_url)
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     db = SessionLocal()
