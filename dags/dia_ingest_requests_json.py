@@ -8,23 +8,39 @@ from scripts.database.session import get_db
 from scripts.requests import dia_request_json
 
 with DAG(
-    dag_id="dia_ingest_requests_json",
+    dag_id="dia_ingest_hourly_json",
     start_date=datetime(2024, 1, 1),
     schedule="@hourly",
     catchup=False,
-) as dag:
+) as dag_hourly:
     
-    @task
+    @task.python
     def get_sources():
         db = get_db(engine_url=dia_config.db_url)
         return fetch_sources(db=db, type="hourly")
     
-    @task
-    def request_json(sources):
+    @task.python
+    def request_json(source):
         return dia_request_json()
     
-    sources = get_sources()
+    _sources = get_sources()
+    _data = request_json.expand(source=_sources)
 
-    request_json(sources=sources)
-
-    "sources >> request_json"
+with DAG(
+    dag_id="dia_ingest_daily_json",
+    start_date=datetime(2026, 3, 1),
+    schedule="@daily",
+    catchup=False
+) as dag_daily:
+    
+    @task.python
+    def get_sources():
+        db = get_db(engine_url=dia_config.db_url)
+        return fetch_sources(db=db, type="daily")
+    
+    @task.python
+    def request_json(source):
+        return dia_request_json()
+    
+    _sources = get_sources()
+    _data = request_json.expand(source=_sources)
