@@ -16,5 +16,3 @@ with DAG(
     db = get_db(engine_url=dia_config.db_url)
     sources = fetch_sources(db=db, type="hourly")
     dia_request_json()
-
-    db >> sources >> dia_request_json
