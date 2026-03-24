@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-class Config:
+class DiaConfig:
     print(" --- Initializing config ---")
 
     load_dotenv()
@@ -23,4 +23,4 @@ class Config:
     
     print("> Config initialized")
 
-config = Config()
+dia_config = DiaConfig()
