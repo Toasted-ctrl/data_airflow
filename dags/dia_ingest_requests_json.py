@@ -17,7 +17,7 @@ with DAG(
     @task.python
     def get_sources():
         db = get_db(engine_url=dia_config.db_url)
-        return fetch_sources(db=db, type="json", sequence="hourly")
+        return fetch_sources(db=next(db), type="json", sequence="hourly")
     
     @task.python
     def request_json(source):
@@ -36,7 +36,7 @@ with DAG(
     @task.python
     def get_sources():
         db = get_db(engine_url=dia_config.db_url)
-        return fetch_sources(db=db, type="json", sequence="daily")
+        return fetch_sources(db=next(db), type="json", sequence="daily")
     
     @task.python
     def request_json(source):
