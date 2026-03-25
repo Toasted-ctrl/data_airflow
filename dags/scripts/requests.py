@@ -1,7 +1,7 @@
 import requests
 
-def request_json(request_data: dict) -> dict:
-    
+def api_request_json(request_data: dict) -> dict:
+
     if request_data.url_ext != None:
         request_url = f"{request_data.base_url}{request_url.url_ext}"
     else:

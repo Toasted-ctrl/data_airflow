@@ -6,7 +6,7 @@ from scripts.core.configs import dia_config
 from scripts.custom.DIA.dia_fetch_sources import fetch_sources
 from scripts.custom.DIA.dia_insert_results import insert_results
 from scripts.database.session import get_db
-from scripts.requests import request_json
+from scripts.requests import api_request_json
 
 @task.python
 def get_sources(type: str, sequence: str) -> list:
@@ -14,8 +14,8 @@ def get_sources(type: str, sequence: str) -> list:
     return fetch_sources(db=next(db), type=type, sequence=sequence)
     
 @task.python
-def request_json(source) -> dict:
-    return request_json(request_data=source)
+def api_request(source) -> dict:
+    return api_request_json(request_data=source)
 
 @task.python
 def post_results(entry) -> None:
@@ -29,5 +29,5 @@ with DAG(
 ) as dag_daily:
     
     _sources = get_sources(type="json", sequence="daily") # Retrieving all sources.
-    _data = request_json.expand(source=_sources) # Requesting data from each source.
+    _data = api_request.expand(source=_sources) # Requesting data from each source.
     post_results.expand(entry=_data) # Adding data through post to DIA.

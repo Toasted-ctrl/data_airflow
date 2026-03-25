@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 
 class DiaConfig:
-    print(" --- Initializing config ---")
+    print("Initializing Config: DIA")
 
     load_dotenv()
 
@@ -21,6 +21,6 @@ class DiaConfig:
     def db_url(self):
         return f"{self.db_protocol}+{self.db_connection}://{self.db_username}:{self.db_password}@{self.db_hostname}:{self.db_port}/{self.db_database}"
     
-    print("> Config initialized")
+    print("Initialized Config: DIA")
 
 dia_config = DiaConfig()
