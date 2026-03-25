@@ -2,9 +2,9 @@ import requests
 
 def api_request_json(request_data: dict) -> dict:
 
-    if 'url_ext' in request_data:
+    if request_data['url_ext']:
         request_url = f"{request_data['base_url']}{request_url['url_ext']}"
-    else:
+    elif not request_data['url_ext']:
         request_url = request_data['base_url']
 
     try:
