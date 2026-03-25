@@ -8,24 +8,18 @@ from scripts.custom.DIA.dia_insert_results import insert_results
 from scripts.database.session import get_db
 from scripts.requests import dia_request_json
 
-with DAG(
-    dag_id="dia_ingest_hourly_json",
-    start_date=datetime(2024, 1, 1),
-    schedule="@hourly",
-    catchup=False,
-) as dag_hourly:
+@task.python
+def get_sources(type: str, sequence: str) -> list:
+    db = get_db(engine_url=dia_config.db_url)
+    return fetch_sources(db=next(db), type=type, sequence=sequence)
     
-    @task.python
-    def get_sources():
-        db = get_db(engine_url=dia_config.db_url)
-        return fetch_sources(db=next(db), type="json", sequence="hourly")
-    
-    @task.python
-    def request_json(source):
-        return dia_request_json()
-    
-    _sources = get_sources()
-    _data = request_json.expand(source=_sources)
+@task.python
+def request_json(source) -> dict:
+    return dia_request_json(request_data=source)
+
+@task.python
+def post_results(entry) -> None:
+    insert_results(entry=entry)
 
 with DAG(
     dag_id="dia_ingest_daily_json",
@@ -34,19 +28,6 @@ with DAG(
     catchup=False
 ) as dag_daily:
     
-    @task.python
-    def get_sources():
-        db = get_db(engine_url=dia_config.db_url)
-        return fetch_sources(db=next(db), type="json", sequence="daily")
-    
-    @task.python
-    def request_json(source):
-        return dia_request_json(request_data=source)
-
-    @task.python
-    def post_results(entry):
-        insert_results(entry=entry)
-
-    _sources = get_sources() # Retrieving all sources.
+    _sources = get_sources(type="json", sequence="daily") # Retrieving all sources.
     _data = request_json.expand(source=_sources) # Requesting data from each source.
     post_results.expand(entry=_data) # Adding data through post to DIA.
