@@ -14,11 +14,11 @@ def get_sources(type: str, sequence: str) -> list:
     return fetch_sources(db=next(db), type=type, sequence=sequence)
     
 @task.python
-def api_request(source) -> dict:
+def api_request(source: dict) -> dict:
     return api_request_json(request_data=source)
 
 @task.python
-def post_results(entry) -> None:
+def post_results(entry: dict) -> None:
     insert_results(entry=entry)
 
 with DAG(
