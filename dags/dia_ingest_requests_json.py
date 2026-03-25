@@ -4,6 +4,7 @@ from datetime import datetime
 
 from scripts.core.configs import dia_config
 from scripts.custom.DIA.dia_fetch_sources import fetch_sources
+from scripts.custom.DIA.dia_insert_results import insert_results
 from scripts.database.session import get_db
 from scripts.requests import dia_request_json
 
@@ -39,8 +40,13 @@ with DAG(
         return fetch_sources(db=next(db), type="json", sequence="daily")
     
     @task.python
-    def request_json(source):
-        return dia_request_json()
+    def post_results(entry):
+        insert_results(entry=entry)
     
+    @task.python
+    def request_json(source):
+        entry = dia_request_json(request_data=source)
+        post_results(entry=entry)
+
     _sources = get_sources()
     _data = request_json.expand(source=_sources)
