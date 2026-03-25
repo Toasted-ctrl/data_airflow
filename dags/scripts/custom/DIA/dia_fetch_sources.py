@@ -9,7 +9,7 @@ def fetch_sources(db: Session, sequence: str, type: str) -> list:
 
     # NOTE: We'll also need to create a dictionary as we cannot return a list of sqlalchemy objects in Airflow.
 
-    query = db.query(Sources).filter(Sources.sequence == sequence, Sources.type == type).all()
+    query = db.query(Sources).filter(Sources.sequence == sequence, Sources.type == type, Sources.is_active == True).all()
     if not query:
         return ['test_1', 'test_2']
     return [
