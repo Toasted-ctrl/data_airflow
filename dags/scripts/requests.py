@@ -3,24 +3,24 @@ import requests
 def api_request_json(request_data: dict) -> dict:
 
     if 'url_ext' in request_data:
-        request_url = f"{request_data.base_url}{request_url.url_ext}"
+        request_url = f"{request_data['base_url']}{request_url['url_ext']}"
     else:
-        request_url = request_data.base_url
+        request_url = request_data['base_url']
 
     try:
         response = requests.get(
             url=request_url,
-            params=request_data.params)
+            params=request_data['params'])
         
     except Exception:
         return {
             "status_code": 999,
             "data": None,
-            "item_id": request_data.item_id
+            "item_id": request_data['item_id']
         }
     
     return {
         "status_code": response.status_code,
         "data": response.json(),
-        "item_id": request_data.item_id
+        "item_id": request_data['item_id']
     }
