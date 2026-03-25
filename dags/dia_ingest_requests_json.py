@@ -6,7 +6,7 @@ from scripts.core.configs import dia_config
 from scripts.custom.DIA.dia_fetch_sources import fetch_sources
 from scripts.custom.DIA.dia_insert_results import insert_results
 from scripts.database.session import get_db
-from scripts.requests import dia_request_json
+from scripts.requests import request_json
 
 @task.python
 def get_sources(type: str, sequence: str) -> list:
@@ -15,7 +15,7 @@ def get_sources(type: str, sequence: str) -> list:
     
 @task.python
 def request_json(source) -> dict:
-    return dia_request_json(request_data=source)
+    return request_json(request_data=source)
 
 @task.python
 def post_results(entry) -> None:
