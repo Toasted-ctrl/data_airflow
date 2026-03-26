@@ -2,19 +2,18 @@ from sqlalchemy.orm import Session
 
 from scripts.custom.DIA.dia_schema import Sources
 
-def fetch_sources(db: Session, sequence: str, type: str) -> list:
+def fetch_sources(db: Session, sequence: str, dtype: str) -> list:
 
     # NOTE: Distinct can't be used as  postgres cannot compare JSON entries.
     # NOTE: We'll just need to make sure that every entry in the sources table is unique.
-
     # NOTE: We'll also need to create a dictionary as we cannot return a list of sqlalchemy objects in Airflow.
 
-    query = db.query(Sources).filter(Sources.sequence == sequence, Sources.type == type, Sources.is_active == True).all()
+    query = db.query(Sources).filter(Sources.sequence == sequence, Sources.dtype == dtype, Sources.is_active == True).all()
     if not query:
-        return ['test_1', 'test_2']
+        return None
     return [
         {
-            "item_id": row.item_id,
+            "source_id": row.source_id,
             "base_url": row.base_url,
             "url_ext": row.url_ext,
             "params": row.params,
