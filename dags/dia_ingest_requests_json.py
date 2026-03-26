@@ -9,9 +9,9 @@ from scripts.database.session import get_db
 from scripts.requests import api_request_json
 
 @task.python # Get sources from DIA ingest table
-def get_sources(type: str, sequence: str) -> list:
+def get_sources(dtype: str, sequence: str) -> list:
     db = get_db(engine_url=dia_config.db_url)
-    return fetch_sources(db=next(db), type=type, sequence=sequence)
+    return fetch_sources(db=next(db), dtype=dtype, sequence=sequence)
     
 @task.python # Making the api request with json response
 def api_request(source: dict) -> dict:
