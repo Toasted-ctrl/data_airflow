@@ -16,11 +16,11 @@ def api_request_json(request_data: dict) -> dict:
         return {
             "status_code": 999,
             "data": None,
-            "item_id": request_data['item_id']
+            "item_id": request_data['source_id']
         }
     
     return {
         "status_code": response.status_code,
         "data": response.json(),
-        "item_id": request_data['item_id']
+        "item_id": request_data['source_id']
     }
