@@ -18,9 +18,8 @@ def post_results(entry: dict) -> None:
     insert_results(entry=entry)
     
 @task.python # Making the api request
-def api_request(source: dict) -> None:
-    api_data = api_request(request_data=source)
-    post_results(entry=api_data)
+def api_request(source: dict) -> dict:
+    return api_request(request_data=source)
 
 with DAG(
     dag_id="dia_ingest_daily",
