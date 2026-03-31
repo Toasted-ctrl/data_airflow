@@ -14,7 +14,7 @@ def get_sources(sequence: str) -> list:
     return fetch_sources(db=next(db), sequence=sequence)
     
 @task.python # Making the api request
-def api_request(source: dict) -> dict:
+def fetch_api_response(source: dict) -> dict:
     return api_request(request_data=source)
 
 @task.python # Posting API results through DIA
@@ -29,7 +29,7 @@ with DAG(
 ) as dag_daily:
     
     _sources = get_sources(sequence="daily")
-    _data = api_request.expand(source=_sources)
+    _data = fetch_api_response.expand(source=_sources)
 
 with DAG(
     dag_id="dia_ingest_hourly",
@@ -39,4 +39,4 @@ with DAG(
 ) as dag_hourly:
     
     _sources = get_sources(sequence="hourly")
-    _data = api_request.expand(source=_sources)
+    _data = fetch_api_response.expand(source=_sources)
