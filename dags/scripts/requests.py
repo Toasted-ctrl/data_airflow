@@ -1,6 +1,6 @@
 import requests
 
-def api_request_json(request_data: dict) -> dict:
+def api_request(request_data: dict) -> dict:
 
     if request_data['url_ext']:
         request_url = f"{request_data['base_url']}{request_data['url_ext']}"
@@ -19,8 +19,17 @@ def api_request_json(request_data: dict) -> dict:
             "item_id": request_data['source_id']
         }
     
+    if request_data['content_type'] == 'json':
+        return_data = response.json()
+
+    elif request_data['content_type'] == 'text/html':
+        return_data = str(response.text)
+
+    else:
+        return_data = None
+    
     return {
         "status_code": response.status_code,
-        "data": response.json(),
+        "data": return_data,
         "item_id": request_data['source_id']
     }
