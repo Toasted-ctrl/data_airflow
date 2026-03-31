@@ -19,7 +19,7 @@ def api_request(request_data: dict) -> dict:
             "item_id": request_data['source_id']
         }
     
-    if request_data['content_type'] == 'json':
+    if request_data['content_type'] == 'application/json':
         return_data = response.json()
 
     elif request_data['content_type'] == 'text/html':
