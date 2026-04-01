@@ -18,7 +18,7 @@ def fetch_api_response(source: dict) -> dict:
 
 @task.python # Posting API results through DIA
 def post_results(data: dict) -> None:
-    api_post_request(
+    return api_post_request(
         data=data,
         api_url=dia_config.DIA_API_POST_URL,
         api_key=dia_config.DIA_API_KEY,
