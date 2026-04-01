@@ -1,6 +1,6 @@
 import requests
 
-def api_request(request_data: dict) -> dict:
+def api_get_request(request_data: dict) -> dict:
 
     if request_data['url_ext']:
         request_url = f"{request_data['base_url']}{request_data['url_ext']}"
@@ -16,7 +16,7 @@ def api_request(request_data: dict) -> dict:
         return {
             "status_code": 999,
             "data": None,
-            "item_id": request_data['source_id']
+            "source_id": request_data['source_id']
         }
     
     if request_data['content_type'] == 'application/json':
@@ -31,5 +31,21 @@ def api_request(request_data: dict) -> dict:
     return {
         "status_code": response.status_code,
         "data": return_data,
-        "item_id": request_data['source_id']
+        "source_id": request_data['source_id']
     }
+
+def api_post_request(data: dict, api_url: str, api_key: str, api_key_name: str):
+
+    """Posts data to API."""
+
+    payload = {}
+    payload['entries'] = []
+    payload['entries'].append(data)
+
+    response = requests.post(
+        url=api_url,
+        headers={api_key_name: api_key},
+        json=payload
+    )
+
+    return response.status_code
