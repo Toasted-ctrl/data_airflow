@@ -23,7 +23,8 @@ def api_get_request(request_data: dict) -> dict:
         return_data = response.json()
 
     elif request_data['content_type'] == 'text/html':
-        return_data = str(response.text)
+        return_data = {}
+        return_data['data'] = str(response.text)
 
     else:
         return_data = None
