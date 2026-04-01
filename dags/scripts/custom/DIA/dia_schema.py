@@ -12,7 +12,7 @@ class Sources(Base):
     base_url = Column(String(100), nullable=False)
     url_ext = Column(String(100), nullable=True)
     params = Column(JSON, nullable=True)
-    content_type = Column(String(10), nullable=False)
+    content_type = Column(String(40), nullable=False)
     sequence = Column(String(20), nullable=False)
     headers = Column(JSON, nullable=True)
     inserted = Column(DateTime(timezone=False), server_default=func.now(), nullable=False)
