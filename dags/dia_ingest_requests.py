@@ -26,7 +26,7 @@ def post_results(data: dict) -> None:
     )
 
 with DAG(
-    dag_id="DIA: Ingest, Daily",
+    dag_id="DIA.Ingest.Daily",
     start_date=datetime(2026, 3, 1),
     schedule="@daily",
     catchup=False
@@ -37,7 +37,7 @@ with DAG(
     results = post_results.expand(entry=_data)
 
 with DAG(
-    dag_id="DIA: Ingest, Hourly",
+    dag_id="DIA.Ingest.Hourly",
     start_date=datetime(2026, 3, 1),
     schedule="@hourly",
     catchup=False
