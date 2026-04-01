@@ -34,7 +34,7 @@ with DAG(
     
     _sources = get_sources(sequence="daily")
     _data = fetch_api_response.expand(source=_sources)
-    results = post_results.expand(entry=_data)
+    results = post_results.expand(data=_data)
 
 with DAG(
     dag_id="DIA.Ingest.Hourly",
@@ -45,4 +45,4 @@ with DAG(
     
     _sources = get_sources(sequence="hourly")
     _data = fetch_api_response.expand(source=_sources)
-    results = post_results.expand(entry=_data)
+    results = post_results.expand(data=_data)
