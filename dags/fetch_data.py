@@ -3,7 +3,7 @@ from airflow.sdk import task
 from datetime import datetime
 
 from scripts.configs.DIA import dia_config, Sources
-from scripts.database.get_data import get_all
+from scripts.database.get_data import get_all_filter_by
 from scripts.database.session import get_db
 
 @task.python
@@ -24,7 +24,7 @@ def get_sources(sequence: str) -> list:
         "content_type"
     ]
 
-    return get_all(
+    return get_all_filter_by(
         table_schema=Sources,
         db=next(db),
         filter_by_values=filter_by_values,

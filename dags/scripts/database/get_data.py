@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-def get_all(table_schema, db: Session, filter_by_values: dict, return_fields: list) -> list:
+def get_all_filter_by(table_schema, db: Session, filter_by_values: dict, return_fields: list) -> list:
     
     """Retrieves list of items for a given set of filters. The required return values must be specified."""
 
