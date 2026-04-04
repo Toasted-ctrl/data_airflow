@@ -46,3 +46,14 @@ with DAG(
     _sources = get_sources(sequence="hourly")
     _data = fetch_api_response.expand(source=_sources)
     results = post_results.expand(data=_data)
+
+with DAG(
+    dag_id="DIA.Ingest.Interval.Minutes.30",
+    start_date=datetime(2026, 3, 1),
+    schedule="*/30 * * * *", # Cron expression, every 30 minutes
+    catchup=False
+) as dag_interval_minutes_30:
+    
+    _sources = get_sources(sequence="30 minute interval")
+    _data = fetch_api_response.expand(source=_sources)
+    results = post_results.expand(data=_data)
