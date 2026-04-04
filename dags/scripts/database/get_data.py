@@ -1,4 +1,3 @@
-from database.session import get_db
 from sqlalchemy.orm import Session
 
 def get_all(table_schema, db: Session, filter_by_values: dict, return_fields: list) -> list:
