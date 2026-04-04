@@ -2,15 +2,34 @@ from airflow import DAG
 from airflow.sdk import task
 from datetime import datetime
 
-from scripts.configs.DIA import dia_config
-from scripts.custom.DIA.dia_fetch_sources import fetch_sources
+from scripts.configs.DIA import dia_config, Sources
+from scripts.database.get_data import get_all_filter_by
 from scripts.database.session import get_db
 from scripts.api_requests.requests import api_get_request, api_post_request
 
-@task.python # Get sources from DIA ingest table
+@task.python # Fetching all sources for which an API call needs to be made.
 def get_sources(sequence: str) -> list:
     db = get_db(engine_url=dia_config.db_url)
-    return fetch_sources(db=next(db), sequence=sequence)
+
+    filter_by_values = {
+        "is_active": True,
+        "sequence": sequence
+    }
+
+    return_fields = [
+        "source_id",
+        "base_url",
+        "url_ext",
+        "headers",
+        "params",
+        "content_type"
+    ]
+
+    return get_all_filter_by(
+        table_schema=Sources,
+        db=next(db),
+        filter_by_values=filter_by_values,
+        return_fields=return_fields)
     
 @task.python # Making the api request
 def fetch_api_response(source: dict) -> dict:
