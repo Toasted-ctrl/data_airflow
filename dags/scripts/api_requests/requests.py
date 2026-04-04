@@ -38,16 +38,13 @@ def api_get_request(request_data: dict) -> dict:
 def api_post_request(data: dict, api_url: str, api_key: str, api_key_name: str):
 
     """Posts data to API."""
-    print("test before payload")
     payload = {}
     payload['entries'] = []
     payload['entries'].append(data)
-    print(payload)
 
     response = requests.post(
         url=api_url,
-        headers={f"{api_key_name}": f"{api_key}"},
-        json=payload
-    )
+        headers={api_key_name: api_key},
+        json=payload)
 
     return response.status_code
