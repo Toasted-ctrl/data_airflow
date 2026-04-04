@@ -38,6 +38,7 @@ with DAG(
 
 with DAG(
     dag_id="DIA.Ingest.Hourly",
+    dag_display_name="DIA: Ingest, hourly",
     start_date=datetime(2026, 3, 1),
     schedule="@hourly",
     catchup=False
