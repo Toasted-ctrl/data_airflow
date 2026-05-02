@@ -37,5 +37,5 @@ def get_max_filter_by(
         .scalar()
     )
     if not max_value:
-        raise EmptyDataError
+        return 0
     return max_value
