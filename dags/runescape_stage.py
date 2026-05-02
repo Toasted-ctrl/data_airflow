@@ -33,7 +33,7 @@ def get_source_ids(description: str) -> list[dict[str, int]]:
         return_fields=return_fields
     )
 
-    return source_ids.get("source_id", [])
+    return [value for _, value in source_ids]
 
 @task.python
 def get_max_ingested_record(
