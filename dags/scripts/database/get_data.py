@@ -33,7 +33,7 @@ def get_max_filter_by(
 
     column = getattr(table_schema, return_field)
 
-    max_value = (
+    max_value = int(
         db.query(func.max(column))
         .filter_by(**filter_by_values)
         .scalar()
