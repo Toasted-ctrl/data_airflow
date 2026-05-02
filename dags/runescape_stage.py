@@ -44,7 +44,7 @@ def get_max_ingested_record(
     """We're using this to get which record we ingested into stage-1 last.
     This way we only have to focus on the new entried in ingest > incremental load."""
 
-    is_table_present: bool = table_exists(table=table_schema, db_url=runescape_config.db_url)
+    is_table_present: bool = table_exists(table_schema=table_schema, db_url=runescape_config.db_url)
     if not is_table_present:
         create_table(table_schema=StageHiscores, db_url=runescape_config.db_url)
         return 0

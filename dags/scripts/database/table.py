@@ -5,13 +5,16 @@ from typing import Type
 class TableCreationError(RuntimeError):
     """Raised when a database table could not be created."""
 
-def table_exists(table: Type[DeclarativeBase], db_url: str) -> bool:
+def table_exists(table_schema: Type[DeclarativeBase], db_url: str) -> bool:
 
     """Checks if the table exists in the specified database."""
 
     engine = create_engine(url=db_url)
     try:
-        return inspect(engine).has_table(table_name=table.__tablename__)
+        exists = inspect(engine).has_table(table_name=table_schema.__tablename__)
+        if not exists:
+            return False
+        return True
     finally:
         engine.dispose()
 
