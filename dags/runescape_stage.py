@@ -66,7 +66,6 @@ with DAG(
     # NOTE: Determine the max ingest_item_id we've already loaded into stage-1.
     # NOTE: If the table does not exist, create table and 0.
 
-    _min_ingest_item_id = get_max_ingested_record(table_schema=Sources, min_record_name="ingest_item_id")
     _source_ids = get_source_ids(description=runescape_config.description_hiscores)
 
     # TODO: Only test to check if we're getting the correct values and to see if the table gets created.
