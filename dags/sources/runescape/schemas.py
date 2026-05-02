@@ -4,8 +4,8 @@ from sqlalchemy.orm import DeclarativeBase
 class Base(DeclarativeBase):
     pass
 
-class StageHiscores(Base):
-    __tablename__ = 'stg_1_hiscores'
+class StageHiscores_1(Base):
+    __tablename__ = 'stg_hiscores_1'
 
     item_id = Column(Integer, primary_key=True)          # id of item in stg_hiscores
     ingest_item_id = Column(Integer, nullable=False)     # item id of item in ingest table
