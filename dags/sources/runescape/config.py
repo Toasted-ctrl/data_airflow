@@ -15,7 +15,7 @@ class RuneScapeConfig:
     db_database: str = os.getenv("RUNESCAPE_DB_DATABASE")
     db_port: str = os.getenv("RUNESCAPE_DB_PORT")
 
-    description_hiscores: str = "Runescape Player Hiscores"
+    description_hiscores: str = "Runescape Player Highscores"
     description_runemetrics: str = "Runescape Player Runemetrics Profile"
 
     @property
