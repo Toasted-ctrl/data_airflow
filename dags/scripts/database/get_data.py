@@ -1,9 +1,10 @@
 from pandas.errors import EmptyDataError
 from sqlalchemy import func
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, DeclarativeBase
+from typing import Type
 
 def get_all_filter_by(
-        table_schema,
+        table_schema: Type[DeclarativeBase],
         db: Session,
         filter_by_values: dict,
         return_fields: list
@@ -21,7 +22,8 @@ def get_all_filter_by(
     ]
 
 def get_max_filter_by(
-        table_schema, db: Session,
+        table_schema: Type[DeclarativeBase],
+        db: Session,
         filter_by_values: dict,
         return_field: int | float
 ) -> int:
