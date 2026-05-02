@@ -26,14 +26,14 @@ def get_source_ids(description: str) -> list[dict[str, int]]:
         "source_id"
     ]
 
-    source_ids: dict = get_all_filter_by(
+    source_ids: list[dict] = get_all_filter_by(
         table_schema=Sources,
         db=next(db),
         filter_by_values=filter_by_values,
         return_fields=return_fields
     )
 
-    return [value for _, value in source_ids]
+    return [source_id.get("source_id") for source_id in source_ids]
 
 @task.python
 def get_max_ingested_record(
