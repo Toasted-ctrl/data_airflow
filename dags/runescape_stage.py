@@ -12,7 +12,7 @@ from sources.DIA.config import dia_config
 from sources.DIA.schemas import Sources
 
 from sources.runescape.config import runescape_config
-from sources.runescape.schemas import StageHiscores
+from sources.runescape.schemas import StageHiscores_1
 
 @task.python
 def get_source_ids(description: str) -> list[dict[str, int]]:
@@ -46,13 +46,13 @@ def get_max_ingested_record(
 
     is_table_present: bool = table_exists(table_schema=table_schema, db_url=runescape_config.db_url)
     if not is_table_present:
-        create_table(table_schema=StageHiscores, db_url=runescape_config.db_url)
+        create_table(table_schema=table_schema, db_url=runescape_config.db_url)
         return 0
     db = get_db(engine_url=runescape_config.db_url)
     return get_max_filter_by(
-        table_schema=StageHiscores,
+        table_schema=table_schema,
         db=next(db),
-        filter_by_values=None, # Leave this at none, just getting the max is enough.
+        filter_by_values={},    # Leave this empty, just getting the max is enough.
         return_field=min_record_name
     )
 
@@ -67,5 +67,6 @@ with DAG(
     # NOTE: If the table does not exist, create table and 0.
 
     _source_ids = get_source_ids(description=runescape_config.description_hiscores)
+    _max_ingested_item_id = get_max_ingested_record(table_schema=StageHiscores_1, min_record_name="ingest_item_id")
 
     # TODO: Only test to check if we're getting the correct values and to see if the table gets created.
