@@ -11,10 +11,8 @@ def table_exists(table_schema: Type[DeclarativeBase], db_url: str) -> bool:
 
     engine = create_engine(url=db_url)
     try:
-        exists = inspect(engine).has_table(table_name=table_schema.__tablename__)
-        if not exists:
-            return False
-        return True
+        table = table_schema.__table__
+        return inspect(engine).has_table(table.name)
     finally:
         engine.dispose()
 
