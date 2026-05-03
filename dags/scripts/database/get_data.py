@@ -57,7 +57,7 @@ def get_all_filters(
     "id": [1, 2, 3],          # IN\n
     "age__gt": 18,            # age > 18\n
     "age__lte": 65,           # age <= 65\n
-    "name__like": "Jo%",      # LIKE
+    "name__like": "Jo%",      # LIKE\n
     }"""
     
     for key, value in filters.items():
