@@ -29,7 +29,8 @@ def get_max_filter_by(
 ) -> int:
 
     """Retrieves the maximum value within a specified column based on a set of filters.
-    The column of which the max needs to be determined must be of type integer or float."""
+    The column of which the max needs to be determined must be of type integer or float.
+    Only equality based filters may be used."""
 
     column = getattr(table_schema, return_field)
 
@@ -38,6 +39,31 @@ def get_max_filter_by(
         .filter_by(**filter_by_values)
         .scalar()
     )
+    
     if not max_value:
         return 0
     return int(max_value)
+
+def get_all_filters(
+    query,
+    model_schema: Type[DeclarativeBase],
+    filters: dict
+) -> list[dict]:
+    
+    """Retrieves a list of entries based on specified filters. Filters may be indicated as follows:
+
+    filters = {\n
+    "status": "active",       # equality\n
+    "id": [1, 2, 3],          # IN\n
+    "age__gt": 18,            # age > 18\n
+    "age__lte": 65,           # age <= 65\n
+    "name__like": "Jo%",      # LIKE
+    }"""
+    
+    for key, value in filters.items():
+        column = getattr(model_schema, key)
+        if isinstance(value, (list, tuple, set)):
+            query = query.filter(column.in_(value))
+        else:
+            query = query.filter(column == value)
+    return query
