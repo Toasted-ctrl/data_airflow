@@ -46,7 +46,7 @@ def get_max_filter_by(
 
 def get_all_filters(
     query,
-    model_schema: Type[DeclarativeBase],
+    table_schema: Type[DeclarativeBase],
     filters: dict
 ) -> list[dict]:
     
@@ -61,7 +61,7 @@ def get_all_filters(
     }"""
     
     for key, value in filters.items():
-        column = getattr(model_schema, key)
+        column = getattr(table_schema, key)
         if isinstance(value, (list, tuple, set)):
             query = query.filter(column.in_(value))
         else:
