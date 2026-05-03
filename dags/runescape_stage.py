@@ -89,7 +89,7 @@ with DAG(
         min_record_name="ingest_item_id"
     )
 
-    _filter = create_filter(
+    _filter = get_filter(
         max_record=_max_ingested_item_id,
         source_ids=_source_ids
     )
