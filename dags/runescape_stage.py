@@ -72,7 +72,7 @@ def get_filter(
     print("Building filter")
 
     return {
-        "ingested_item_id__gt": max_record,
+        "item_id__gt": max_record,
         "source_id": source_ids
     }
 
