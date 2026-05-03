@@ -19,7 +19,7 @@ class Sources(Base):
     is_active = Column(Boolean, nullable=False)
 
 class Ingest(Base):
-    __tablemame__ = 'ingest'
+    __tablename__ = 'ingest'
 
     item_id = Column(Integer, primary_key=True)
     source_id = Column(Integer, nullable=False)
