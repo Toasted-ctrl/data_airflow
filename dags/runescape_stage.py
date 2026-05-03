@@ -9,7 +9,7 @@ from scripts.database.session import get_db
 from scripts.database.table import table_exists, create_table
 
 from sources.DIA.config import dia_config
-from sources.DIA.schemas import Sources
+from sources.DIA.schemas import Sources, Ingest
 
 from sources.runescape.config import runescape_config
 from sources.runescape.schemas import StageHiscores_1
@@ -44,10 +44,15 @@ def get_max_ingested_record(
     # NOTE: We're using this to get which record we ingested into stage-1 last.
     # NOTE: This way we only have to focus on the new entried in ingest > incremental load.
 
-    is_table_present: bool = table_exists(table_schema=table_schema, db_url=runescape_config.db_url)
+    is_table_present: bool = table_exists(
+        table_schema=table_schema,
+        db_url=runescape_config.db_url
+    )
+
     if not is_table_present:
         create_table(table_schema=table_schema, db_url=runescape_config.db_url)
         return 0
+    
     db = get_db(engine_url=runescape_config.db_url)
     return get_max_filter_by(
         table_schema=table_schema,
@@ -64,11 +69,26 @@ def get_filter(
     
     """Creates filter to use with get_all_filters."""
 
+    print("Building filter")
+
     return {
         "ingested_item_id__gt": max_record,
         "source_id": source_ids
     }
+
+@task.python
+def get_data(
+    filters: dict,
+    table_schema: Type[DeclarativeBase]
+) -> list[dict]:
     
+    db = get_db(engine_url=dia_config.db_url)
+    query = get_all_filters(
+        query=next(db).query(table_schema),
+        table_schema=table_schema,
+        filters=filters)
+    
+    return query
 
 with DAG(
     dag_id="runescape.stage.1.hiscores.incremental",
@@ -92,6 +112,11 @@ with DAG(
     _filter = get_filter(
         max_record=_max_ingested_item_id,
         source_ids=_source_ids
+    )
+
+    _data = get_data(
+        filters=_filter,
+        table_schema=Ingest
     )
 
     # TODO: Only test to check if we're getting the correct values and to see if the table gets created.
