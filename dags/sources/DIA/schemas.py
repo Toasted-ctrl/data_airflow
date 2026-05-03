@@ -17,3 +17,12 @@ class Sources(Base):
     headers = Column(JSON, nullable=True)
     inserted = Column(DateTime(timezone=False), server_default=func.now(), nullable=False)
     is_active = Column(Boolean, nullable=False)
+
+class Ingest(Base):
+    __tablemame__ = 'ingest'
+
+    item_id = Column(Integer, primary_key=True)
+    source_id = Column(Integer, nullable=False)
+    status_code = Column(Integer, nullable=False)
+    data = Column(JSON, nullable=True)
+    inserted = Column(DateTime(timezone=False), server_default=func.now(), nullable=False)
